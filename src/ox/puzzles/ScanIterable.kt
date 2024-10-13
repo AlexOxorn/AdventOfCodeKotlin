@@ -11,7 +11,7 @@ class ScanIterable<T>(filename: String, private val parseFunc: (Scanner) -> T) :
 
     private fun cache() {
         cached = try {
-            parseFunc(scan);
+            parseFunc(scan)
         } catch (e: InputMismatchException) {
             null
         } catch (e: NoSuchElementException) {
@@ -36,6 +36,10 @@ class ScanIterable<T>(filename: String, private val parseFunc: (Scanner) -> T) :
             cached = null
             return cachedCopy
         }
-        return parseFunc(scan);
+        return parseFunc(scan)
+    }
+
+    fun asSequence(): Sequence<T> {
+        return iterator().asSequence()
     }
 }

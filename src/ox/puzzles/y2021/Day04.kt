@@ -53,7 +53,7 @@ fun parseBingoCard(s: Scanner): BingoCard {
 fun init(filename: String): Pair<BingoInputs, MutableList<BingoCard>> {
     resetPool()
     val inputScanner = ScanIterable(filename, ::parseBingoCard)
-    return Pair(extractRoller(inputScanner.scan), inputScanner.iterator().asSequence().toMutableList())
+    return Pair(extractRoller(inputScanner.scan), inputScanner.toMutableList())
 }
 
 class Day04(override val filename: String) : Day {

@@ -14,7 +14,7 @@ open class Grid2D<T> {
 
     constructor(width: Int, range: Iterable<T>) {
         this.width = width
-        listData = range.iterator().asSequence().toMutableList()
+        listData = range.toMutableList()
     }
 
     constructor(width: Int, height: Int = width, generator: (Int) -> T) {
@@ -23,7 +23,7 @@ open class Grid2D<T> {
     }
 
     operator fun get(x: Int, y: Int): T {
-        return listData[y * width + x];
+        return listData[y * width + x]
     }
     operator fun set(x: Int, y: Int, assign: T) {
         listData[y * width + x] = assign
