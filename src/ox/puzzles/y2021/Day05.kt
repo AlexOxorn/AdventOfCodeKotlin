@@ -2,6 +2,7 @@ package ox.puzzles.y2021
 
 import ox.lib.util.Grid2D
 import ox.puzzles.Day
+import ox.puzzles.FileIterable
 import ox.puzzles.Parsable
 import ox.puzzles.ScanIterable
 import java.util.*
@@ -80,10 +81,10 @@ class Grid(b: Boolean = false) : Grid2D<Int>(1000, MutableList(1000 * 1000) { 0 
     }
 }
 
-class Day05(override val filename: String) : Day {
+class Day05(val filename: String) : Day {
     override fun part1() : Int {
         val g = Grid()
-        val lines = ScanIterable(filename, Line::parse)
+        val lines = FileIterable(filename, Line::parse)
         for (l in lines) {
             g.addLine(l)
         }
@@ -92,7 +93,7 @@ class Day05(override val filename: String) : Day {
 
     override fun part2() : Int {
         val g = Grid(true)
-        val lines = ScanIterable(filename, Line::parse)
+        val lines = FileIterable(filename, Line::parse)
         for (l in lines) {
             g.addLine(l)
         }

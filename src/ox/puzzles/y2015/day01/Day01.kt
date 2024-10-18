@@ -1,4 +1,4 @@
-package ox.puzzles.y2015
+package ox.puzzles.y2015.day01
 
 import ox.puzzles.Day
 import java.io.File
@@ -11,20 +11,20 @@ fun charToVal(c: Char): Int {
     }
 }
 
-class Day01(override val filename: String) : Day {
+class Day01 : Day {
     override fun part1() : Int {
-        val line = File(filename).readText()
+        val line = getBufferedReader(getInputName()).readText()
         return line.map(::charToVal).sum()
     }
 
     override fun part2() : Int {
-        val line = File(filename).readText()
+        val line = getBufferedReader(getInputName()).readText()
         val result = line.map(::charToVal).runningFold(0, Int::plus).withIndex().first { it.value < 0 }
         return result.index
     }
 }
 
 fun main() {
-    println(Day01("inputs/2015/day01_input.txt").part1())
-    println(Day01("inputs/2015/day01_input.txt").part2())
+    println(Day01().part1())
+    println(Day01().part2())
 }

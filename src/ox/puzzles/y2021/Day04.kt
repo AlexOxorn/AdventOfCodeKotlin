@@ -2,6 +2,7 @@ package ox.puzzles.y2021
 
 import ox.lib.util.Grid2D
 import ox.puzzles.Day
+import ox.puzzles.FileIterable
 import ox.puzzles.ScanIterable
 import java.util.*
 
@@ -52,11 +53,11 @@ fun parseBingoCard(s: Scanner): BingoCard {
 
 fun init(filename: String): Pair<BingoInputs, MutableList<BingoCard>> {
     resetPool()
-    val inputScanner = ScanIterable(filename, ::parseBingoCard)
+    val inputScanner = FileIterable(filename, ::parseBingoCard)
     return Pair(extractRoller(inputScanner.scan), inputScanner.toMutableList())
 }
 
-class Day04(override val filename: String) : Day {
+class Day04(val filename: String) : Day {
     override fun part1(): Int {
         val (roller, cards) = init(filename)
         for (ball in roller) {

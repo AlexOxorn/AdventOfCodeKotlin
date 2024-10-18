@@ -3,6 +3,7 @@ package ox.puzzles.y2021
 import ox.lib.collectionExpansion.toUInt
 import ox.lib.itertools.inplaceFold
 import ox.puzzles.Day
+import ox.puzzles.FileIterable
 import ox.puzzles.ScanIterable
 import java.util.*
 
@@ -61,16 +62,16 @@ fun recursiveDecent(l: List<Int>, trueBegin: Int, trueEnd: Int, c: (Int) -> Bool
     return begin - trueBegin
 }
 
-class Day03(override val filename: String) : Day {
+class Day03(val filename: String) : Day {
     override fun part1(): Int {
-        val lines = ScanIterable(filename, ::bitSetFromInput)
+        val lines = FileIterable(filename, ::bitSetFromInput)
         val result = lines.inplaceFold(BitCounter(), BitCounter::plusAssign)
         val (gamma, epsilon) = result.gammaEpsilon()
         return (gamma * epsilon).toInt()
     }
 
     override fun part2(): Int {
-        val lines = ScanIterable(filename, ::bitSetFromInput)
+        val lines = FileIterable(filename, ::bitSetFromInput)
         val binaryTree = lines.inplaceFold(MutableList(1 shl bitWidth) { 0 }, ::addReading)
         val o2 = recursiveDecent(binaryTree, 0, binaryTree.size) { it > 0 }
         val co2 = recursiveDecent(binaryTree, 0, binaryTree.size) { it <= 0 }

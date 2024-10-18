@@ -1,5 +1,6 @@
 ## Advent of Code ##
 inputs/*
+src/ox/puzzles/**/*.txt
 
 ### IntelliJ IDEA ###
 out/

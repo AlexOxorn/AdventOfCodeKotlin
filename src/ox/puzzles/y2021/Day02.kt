@@ -1,6 +1,7 @@
 package ox.puzzles.y2021
 
 import ox.puzzles.Day
+import ox.puzzles.FileIterable
 import ox.puzzles.ScanIterable
 import java.util.Scanner
 import java.util.regex.Pattern
@@ -49,14 +50,14 @@ fun moveVer2(c: Coords, d: Step): Coords {
     }
 }
 
-class Day02(override val filename: String) : Day {
+class Day02(val filename: String) : Day {
     override fun part1(): Int {
-        val steps = ScanIterable(filename, Step::parse)
+        val steps = FileIterable(filename, Step::parse)
         val res = steps.fold(Coords(), ::moveVer1)
         return res.result()
     }
     override fun part2(): Int {
-        val steps = ScanIterable(filename, Step::parse)
+        val steps = FileIterable(filename, Step::parse)
         val res = steps.fold(Coords(), ::moveVer2)
         return res.result()
     }

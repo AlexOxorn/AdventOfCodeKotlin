@@ -3,10 +3,11 @@ package ox.puzzles
 import java.io.File
 import java.util.*
 
-class ScanIterable<T>(filename: String, private val parseFunc: (Scanner) -> T) : Iterable<T>,
+abstract class ScanIterable<T>(scan: Scanner, val parseFunc: (Scanner) -> T) : Iterable<T>,
     Iterator<T> {
+
     private var cached: T? = null
-    var scan: Scanner = Scanner(File(filename))
+    var scan: Scanner = scan
         private set
 
     private fun cache() {
@@ -43,3 +44,13 @@ class ScanIterable<T>(filename: String, private val parseFunc: (Scanner) -> T) :
         return iterator().asSequence()
     }
 }
+
+
+class FileIterable<T>(filename: String, parseFunc: (Scanner) -> T) :
+    ScanIterable<T>(Scanner(File(filename)), parseFunc)
+
+class ResourceIterable<T>(filename: String, parseFunc: (Scanner) -> T) :
+    ScanIterable<T>(
+        Scanner(ScanIterable::class.java.getResourceAsStream(filename)!!.bufferedReader()),
+        parseFunc
+    )

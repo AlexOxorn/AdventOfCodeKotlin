@@ -1,7 +1,7 @@
-package ox.puzzles.y2015
+package ox.puzzles.y2015.day02
 
 import ox.puzzles.Day
-import ox.puzzles.ScanIterable
+import ox.puzzles.ResourceIterable
 import java.util.Scanner
 
 data class Prism(val x: Int, val y: Int, val z: Int) {
@@ -16,21 +16,22 @@ data class Prism(val x: Int, val y: Int, val z: Int) {
     fun ribbon() = volume() + perimeter().min()
 }
 
-fun parsePrism(s: Scanner) : Prism{
+fun parsePrism(s: Scanner) : Prism {
     s.useDelimiter("[x\n]")
     return Prism(s.nextInt(), s.nextInt(), s.nextInt())
 }
 
-class Day02(override val filename: String) : Day {
+class Day02 : Day {
     override fun part1(): Int {
-        return ScanIterable(filename, ::parsePrism).map(Prism::wrappingPaper).sum()
+        return ResourceIterable(getInputName(), ::parsePrism).map(Prism::wrappingPaper).sum()
     }
     override fun part2(): Int {
-        return ScanIterable(filename, ::parsePrism).map(Prism::ribbon).sum()
+        return ResourceIterable(getInputName(), ::parsePrism).map(Prism::ribbon).sum()
     }
 }
 
 fun main() {
-    println(Day02("inputs/2015/day02_input.txt").part1())
-    println(Day02("inputs/2015/day02_input.txt").part2())
+    val day = Day02()
+    println(day.part1())
+    println(day.part2())
 }
