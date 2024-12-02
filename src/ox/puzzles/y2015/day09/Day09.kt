@@ -1,6 +1,5 @@
 package ox.puzzles.y2015.day09
 
-import ox.lib.itertools.zipWithNext
 import ox.puzzles.Day
 import java.util.regex.Pattern
 
@@ -75,7 +74,7 @@ operator fun <T: Comparable<T>> Iterable<T>.compareTo(other: Iterable<T>): Int {
 
     while (first.hasNext() && second.hasNext()) {
         val cmp = first.next().compareTo(second.next())
-        if (cmp != 0) return cmp;
+        if (cmp != 0) return cmp
     }
     if (!first.hasNext() && !second.hasNext())
         return 0
@@ -86,11 +85,6 @@ operator fun <T: Comparable<T>> Iterable<T>.compareTo(other: Iterable<T>): Int {
 
 
 fun main() {
-    val arr1 = listOf(0, 4, 6, 10)
-    val arr2 = listOf(1, 4, 3, 10)
-    println(arr1.asReversed() > arr2.asReversed())
-    return;
-
     val d = Day09()
     println(d.part1())
     println(d.part2())

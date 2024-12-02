@@ -3,8 +3,6 @@ package ox.puzzles.y2021
 import ox.lib.util.Grid2D
 import ox.puzzles.Day
 import ox.puzzles.FileIterable
-import ox.puzzles.Parsable
-import ox.puzzles.ScanIterable
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.math.abs
@@ -22,11 +20,11 @@ data class Point(var x: Int, var y: Int) : Comparable<Point> {
 
 data class Line(var p1: Point, var p2: Point) {
     fun vertical(): Boolean {
-        return p1.x == p2.x;
+        return p1.x == p2.x
     }
 
     fun horizontal(): Boolean {
-        return p1.y == p2.y;
+        return p1.y == p2.y
     }
 
     companion object {
@@ -47,18 +45,18 @@ data class Line(var p1: Point, var p2: Point) {
 }
 
 class Grid(b: Boolean = false) : Grid2D<Int>(1000, MutableList(1000 * 1000) { 0 }) {
-    var diag = b;
+    private var diag = b
 
     fun addLine(l: Line) {
         if (l.vertical()) {
-            val horizontal = l.p1.x;
+            val horizontal = l.p1.x
             val minY = min(l.p1.y, l.p2.y)
             val maxY = max(l.p1.y, l.p2.y)
             for (vertical in minY..maxY) {
                 this[horizontal, vertical] = this[horizontal, vertical] + 1
             }
         } else if (l.horizontal()) {
-            val vertical = l.p1.y;
+            val vertical = l.p1.y
             val minX = min(l.p1.x, l.p2.x)
             val maxX = max(l.p1.x, l.p2.x)
             for (horizontal in minX..maxX) {
@@ -71,7 +69,7 @@ class Grid(b: Boolean = false) : Grid2D<Int>(1000, MutableList(1000 * 1000) { 0 
             val length = abs(sign)
             sign /= length
             for (i in 0..length) {
-                this[left.x + i, left.y + sign * i] = this[left.x + i, left.y + sign * i] + 1;
+                this[left.x + i, left.y + sign * i] = this[left.x + i, left.y + sign * i] + 1
             }
         }
     }
@@ -81,14 +79,14 @@ class Grid(b: Boolean = false) : Grid2D<Int>(1000, MutableList(1000 * 1000) { 0 
     }
 }
 
-class Day05(val filename: String) : Day {
+class Day05(private val filename: String) : Day {
     override fun part1i() : Int {
         val g = Grid()
         val lines = FileIterable(filename, Line::parse)
         for (l in lines) {
             g.addLine(l)
         }
-        return g.countScore();
+        return g.countScore()
     }
 
     override fun part2i() : Int {
@@ -97,6 +95,6 @@ class Day05(val filename: String) : Day {
         for (l in lines) {
             g.addLine(l)
         }
-        return g.countScore();
+        return g.countScore()
     }
 }

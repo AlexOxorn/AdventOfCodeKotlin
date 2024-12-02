@@ -3,11 +3,10 @@ package ox.puzzles.y2021
 import ox.lib.util.Grid2D
 import ox.puzzles.Day
 import ox.puzzles.FileIterable
-import ox.puzzles.ScanIterable
 import java.util.*
 
-val bingoSize = 5
-val poolSize = 99
+const val bingoSize = 5
+const val poolSize = 99
 typealias BingoInputs = ArrayList<Int>
 
 var numberPool = MutableList(poolSize + 1) { false }
@@ -57,7 +56,7 @@ fun init(filename: String): Pair<BingoInputs, MutableList<BingoCard>> {
     return Pair(extractRoller(inputScanner.scan), inputScanner.toMutableList())
 }
 
-class Day04(val filename: String) : Day {
+class Day04(private val filename: String) : Day {
     override fun part1i(): Int {
         val (roller, cards) = init(filename)
         for (ball in roller) {

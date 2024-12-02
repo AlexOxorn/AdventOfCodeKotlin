@@ -4,16 +4,15 @@ import ox.lib.collectionExpansion.toUInt
 import ox.lib.itertools.inplaceFold
 import ox.puzzles.Day
 import ox.puzzles.FileIterable
-import ox.puzzles.ScanIterable
 import java.util.*
 
-val bitWidth = 12
+const val bitWidth = 12
 
 fun bitSetFromInput(s: Scanner): BitSet {
     val l = s.nextInt(2)
     val ret = BitSet(bitWidth)
     (0..<bitWidth).filter { (1 shl it) and l != 0 }.forEach { ret.set(it) }
-    return ret;
+    return ret
 }
 
 class BitCounter : ArrayList<Int>(MutableList(bitWidth) { 0 }) {
@@ -49,8 +48,8 @@ fun recursiveDecent(l: List<Int>, trueBegin: Int, trueEnd: Int, c: (Int) -> Bool
         if (dist < 1)
             break
         val mid = begin + dist / 2
-        val sum1 = (begin..<mid).map { l[it] }.sum()
-        val sum2 = (mid..<end).map { l[it] }.sum()
+        val sum1 = (begin..<mid).sumOf { l[it] }
+        val sum2 = (mid..<end).sumOf { l[it] }
         if (sum1 + sum2 == 1) {
             return l.subList(begin, end).indexOf(1) + begin - trueBegin
         }
@@ -62,7 +61,7 @@ fun recursiveDecent(l: List<Int>, trueBegin: Int, trueEnd: Int, c: (Int) -> Bool
     return begin - trueBegin
 }
 
-class Day03(val filename: String) : Day {
+class Day03(private val filename: String) : Day {
     override fun part1i(): Int {
         val lines = FileIterable(filename, ::bitSetFromInput)
         val result = lines.inplaceFold(BitCounter(), BitCounter::plusAssign)

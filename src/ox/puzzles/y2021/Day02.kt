@@ -2,7 +2,6 @@ package ox.puzzles.y2021
 
 import ox.puzzles.Day
 import ox.puzzles.FileIterable
-import ox.puzzles.ScanIterable
 import java.util.Scanner
 import java.util.regex.Pattern
 
@@ -28,12 +27,12 @@ data class Step(val dir: DIR, val magnitude: Int) {
 }
 data class Coords(val forward: Int = 0, val depth: Int = 0, val aim: Int = 0) {
     fun result(): Int {
-        return forward * depth;
+        return forward * depth
     }
 }
 
 fun moveVer1(c: Coords, d: Step): Coords {
-    val (dir, mag) = d;
+    val (dir, mag) = d
     return when (dir) {
         DIR.Forward -> c.copy(forward = c.forward + mag)
         DIR.Down -> c.copy(depth = c.depth + mag)
@@ -42,7 +41,7 @@ fun moveVer1(c: Coords, d: Step): Coords {
 }
 
 fun moveVer2(c: Coords, d: Step): Coords {
-    val (dir, mag) = d;
+    val (dir, mag) = d
     return when (dir) {
         DIR.Forward -> c.copy(forward = c.forward + mag, depth = c.depth + c.aim * mag)
         DIR.Down -> c.copy(aim = c.aim + mag)
@@ -50,7 +49,7 @@ fun moveVer2(c: Coords, d: Step): Coords {
     }
 }
 
-class Day02(val filename: String) : Day {
+class Day02(private val filename: String) : Day {
     override fun part1i(): Int {
         val steps = FileIterable(filename, Step::parse)
         val res = steps.fold(Coords(), ::moveVer1)

@@ -36,16 +36,16 @@ fun isTolerant(
     first: Int,
     second: Int,
     except: Int? = null,
-    dir: Optional<Boolean> = Optional.empty(),
+    dir: DIR = DIR.UNKNOWN,
 ): Boolean {
     if (second >= report.size) {
         return true
     }
 
     val diff = report[second] - report[first]
-    val valid = abs(diff) in 1..3 && (dir.map { it == diff < 0 }).orElse(true)
+    val valid = abs(diff) in 1..3 && dir.match(diff)
 
-    return (valid && isTolerant(report, second, second + 1, except, dir.or {Optional.of(diff > 0)})) ||
+    return (valid && isTolerant(report, second, second + 1, except, dir.from(diff))) ||
             (except != null && isTolerant(report, first, second + 1, second, dir))
 }
 

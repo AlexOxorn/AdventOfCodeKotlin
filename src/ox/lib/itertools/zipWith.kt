@@ -1,7 +1,5 @@
 package ox.lib.itertools
 
-import java.util.Deque
-
 inline fun <T, R> Iterable<T>.zipWithNext(n: Int, transform: (a: T, b: T) -> R): List<R> {
     val iterator = iterator()
     if (!iterator.hasNext()) return emptyList()
@@ -14,7 +12,7 @@ inline fun <T, R> Iterable<T>.zipWithNext(n: Int, transform: (a: T, b: T) -> R):
         if (iterator.hasNext())
             offQueue.addLast(iterator.next())
         else
-            return emptyList();
+            return emptyList()
     }
     while (iterator.hasNext()) {
         offQueue.addLast(iterator.next())

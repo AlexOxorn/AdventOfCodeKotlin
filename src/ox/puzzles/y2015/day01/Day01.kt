@@ -1,7 +1,6 @@
 package ox.puzzles.y2015.day01
 
 import ox.puzzles.Day
-import java.io.File
 
 fun charToVal(c: Char): Int {
     return when(c) {
