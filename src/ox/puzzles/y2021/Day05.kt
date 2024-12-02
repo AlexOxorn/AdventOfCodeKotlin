@@ -82,7 +82,7 @@ class Grid(b: Boolean = false) : Grid2D<Int>(1000, MutableList(1000 * 1000) { 0 
 }
 
 class Day05(val filename: String) : Day {
-    override fun part1() : Int {
+    override fun part1i() : Int {
         val g = Grid()
         val lines = FileIterable(filename, Line::parse)
         for (l in lines) {
@@ -91,7 +91,7 @@ class Day05(val filename: String) : Day {
         return g.countScore();
     }
 
-    override fun part2() : Int {
+    override fun part2i() : Int {
         val g = Grid(true)
         val lines = FileIterable(filename, Line::parse)
         for (l in lines) {

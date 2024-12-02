@@ -22,10 +22,10 @@ fun parsePrism(s: Scanner) : Prism {
 }
 
 class Day02 : Day {
-    override fun part1(): Int {
+    override fun part1i(): Int {
         return ResourceIterable(getInputName(), ::parsePrism).map(Prism::wrappingPaper).sum()
     }
-    override fun part2(): Int {
+    override fun part2i(): Int {
         return ResourceIterable(getInputName(), ::parsePrism).map(Prism::ribbon).sum()
     }
 }

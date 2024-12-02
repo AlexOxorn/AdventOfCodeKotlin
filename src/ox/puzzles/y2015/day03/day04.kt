@@ -14,7 +14,7 @@ class Houses : InfiniteGrid2D<Int>() {
 }
 
 class Day03 : Day {
-    override fun part1(): Int {
+    override fun part1i(): Int {
         val houses = Houses()
         var currentX = 0
         var currentY = 0
@@ -34,7 +34,7 @@ class Day03 : Day {
         return houses.countHouses()
     }
 
-    override fun part2(): Int {
+    override fun part2i(): Int {
         val houses = Houses()
         var currentSantaX = 0
         var currentSantaY = 0

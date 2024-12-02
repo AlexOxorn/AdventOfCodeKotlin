@@ -12,12 +12,12 @@ fun charToVal(c: Char): Int {
 }
 
 class Day01 : Day {
-    override fun part1() : Int {
+    override fun part1i() : Int {
         val line = getBufferedReader(getInputName()).readText()
         return line.map(::charToVal).sum()
     }
 
-    override fun part2() : Int {
+    override fun part2i() : Int {
         val line = getBufferedReader(getInputName()).readText()
         val result = line.map(::charToVal).runningFold(0, Int::plus).withIndex().first { it.value < 0 }
         return result.index

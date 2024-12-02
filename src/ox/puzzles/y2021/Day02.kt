@@ -51,12 +51,12 @@ fun moveVer2(c: Coords, d: Step): Coords {
 }
 
 class Day02(val filename: String) : Day {
-    override fun part1(): Int {
+    override fun part1i(): Int {
         val steps = FileIterable(filename, Step::parse)
         val res = steps.fold(Coords(), ::moveVer1)
         return res.result()
     }
-    override fun part2(): Int {
+    override fun part2i(): Int {
         val steps = FileIterable(filename, Step::parse)
         val res = steps.fold(Coords(), ::moveVer2)
         return res.result()

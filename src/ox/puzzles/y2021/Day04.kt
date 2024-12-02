@@ -58,7 +58,7 @@ fun init(filename: String): Pair<BingoInputs, MutableList<BingoCard>> {
 }
 
 class Day04(val filename: String) : Day {
-    override fun part1(): Int {
+    override fun part1i(): Int {
         val (roller, cards) = init(filename)
         for (ball in roller) {
             numberPool[ball] = true
@@ -70,7 +70,7 @@ class Day04(val filename: String) : Day {
         return -1
     }
 
-    override fun part2(): Int {
+    override fun part2i(): Int {
         val (roller, cards) = init(filename)
         for (ball in roller) {
             numberPool[ball] = true

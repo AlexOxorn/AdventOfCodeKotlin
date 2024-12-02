@@ -63,14 +63,14 @@ fun recursiveDecent(l: List<Int>, trueBegin: Int, trueEnd: Int, c: (Int) -> Bool
 }
 
 class Day03(val filename: String) : Day {
-    override fun part1(): Int {
+    override fun part1i(): Int {
         val lines = FileIterable(filename, ::bitSetFromInput)
         val result = lines.inplaceFold(BitCounter(), BitCounter::plusAssign)
         val (gamma, epsilon) = result.gammaEpsilon()
         return (gamma * epsilon).toInt()
     }
 
-    override fun part2(): Int {
+    override fun part2i(): Int {
         val lines = FileIterable(filename, ::bitSetFromInput)
         val binaryTree = lines.inplaceFold(MutableList(1 shl bitWidth) { 0 }, ::addReading)
         val o2 = recursiveDecent(binaryTree, 0, binaryTree.size) { it > 0 }

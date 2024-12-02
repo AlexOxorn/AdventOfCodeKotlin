@@ -24,9 +24,9 @@ class Day04 : Day {
         return 0
     }
 
-    override fun part1() = solve(5)
+    override fun part1i() = solve(5)
 
-    override fun part2() = solve(6)
+    override fun part2i() = solve(6)
 }
 
 fun main() {

@@ -9,12 +9,20 @@ interface Day {
         return part2().toString()
     }
 
-    fun part1(): Int {
-        return 0
+    fun part1i(): Int {
+        return part2().toInt()
     }
 
-    fun part2(): Int {
-        return 0
+    fun part2i(): Int {
+        return part2().toInt()
+    }
+
+    fun part1(): Long {
+        return part1i().toLong()
+    }
+
+    fun part2(): Long {
+        return part2i().toLong()
     }
 
     private fun transformNameFull(name: String) = "${name.lowercase()}_input.txt"
