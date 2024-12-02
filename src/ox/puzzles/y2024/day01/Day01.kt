@@ -17,10 +17,10 @@ class Day01 : Day {
 
     override fun part2(): Long {
         val (list1, list2) = ResourceIterable(getInputName(), ::parseText).unzip()
-        val counts1 = list1.stream().collect(Collectors.groupingBy({a: Int -> a}, Collectors.counting()))
-        val counts2 = list2.stream().collect(Collectors.groupingBy({a: Int -> a}, Collectors.counting()))
+        val counts1 = list1.stream().collect(Collectors.groupingBy({ it }, Collectors.counting()))
+        val counts2 = list2.stream().collect(Collectors.groupingBy({ it }, Collectors.counting()))
 
-        return counts1.map { it.key * it.value * counts2.getOrDefault(it.key, 0) }.sum()
+        return counts1.entries.sumOf { it.key * it.value * counts2.getOrDefault(it.key, 0) }
     }
 }
 
