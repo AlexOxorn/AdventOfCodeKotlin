@@ -1,8 +1,14 @@
 package ox.lib.util
 
+import ox.lib.itertools.cartesianProduct
+
 open class Grid2D<T> {
-    protected var listData: MutableList<T> = ArrayList()
-    protected var width: Int = 0
+    var listData: MutableList<T> = ArrayList()
+        protected set
+    var width: Int = 0
+        protected set
+    val height: Int
+        get() = listData.size / width
 
     constructor(ranges: Iterable<Collection<T>>) {
         for (rng in ranges) {
@@ -22,10 +28,38 @@ open class Grid2D<T> {
         this.listData = MutableList(width * height, generator)
     }
 
+    private fun assertBounds(x: Int, y: Int) {
+        if (!checkBounds(x, y))
+            throw IndexOutOfBoundsException()
+    }
+
+    private fun checkBounds(x: Int, y: Int): Boolean{
+        if (x !in 0..<width)
+            return false
+        if (y !in 0..<height)
+            return false
+        return true
+    }
+
     operator fun get(x: Int, y: Int): T {
+        assertBounds(x, y)
         return listData[y * width + x]
     }
     operator fun set(x: Int, y: Int, assign: T) {
+        assertBounds(x, y)
         listData[y * width + x] = assign
     }
+
+    fun getOrNull(x: Int, y: Int): T? {
+        if (!checkBounds(x, y)) {
+            return null
+        }
+        return listData.getOrNull(y * width + x)
+    }
+
+    fun indices() = (0..<height).cartesianProduct(0..<width).map { (j, i) -> i to j }
 }
+
+class CharacterGrid(lines: Iterable<String>) : Grid2D<Char>(
+    lines.asSequence().map { it.toList() }.asIterable()
+)

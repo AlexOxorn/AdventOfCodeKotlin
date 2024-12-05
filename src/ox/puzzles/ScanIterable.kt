@@ -1,9 +1,10 @@
 package ox.puzzles
 
+import java.io.BufferedReader
 import java.io.File
 import java.util.*
 
-abstract class ScanIterable<T>(scan: Scanner, val parseFunc: (Scanner) -> T) : Iterable<T>,
+open class ScanIterable<T>(scan: Scanner, val parseFunc: (Scanner) -> T) : Iterable<T>,
     Iterator<T> {
 
     private var cached: T? = null
@@ -42,6 +43,10 @@ abstract class ScanIterable<T>(scan: Scanner, val parseFunc: (Scanner) -> T) : I
 
     fun asSequence(): Sequence<T> {
         return iterator().asSequence()
+    }
+
+    fun getBufferedReader(filename: String): BufferedReader {
+        return ScanIterable::class.java.getResourceAsStream(filename)!!.bufferedReader()
     }
 }
 
