@@ -10,6 +10,14 @@ open class Grid2D<T> {
     val height: Int
         get() = listData.size / width
 
+    fun <R> copy(proj: (T) -> R): Grid2D<R> {
+        return Grid2D(width, listData.map(proj))
+    }
+
+    fun copy(): Grid2D<T> {
+        return Grid2D(width, listData)
+    }
+
     constructor(ranges: Iterable<Collection<T>>) {
         for (rng in ranges) {
             listData.addAll(rng)
