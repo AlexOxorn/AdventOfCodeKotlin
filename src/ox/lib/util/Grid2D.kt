@@ -18,6 +18,14 @@ open class Grid2D<T> {
         return Grid2D(width, listData)
     }
 
+    fun rows(): Iterable<Iterable<T>> {
+        return listData.asSequence().chunked(width).asIterable()
+    }
+
+    fun withIndex(): List<Pair<Pair<Int, Int>, T>> {
+        return this.indices() zip listData
+    }
+
     constructor(ranges: Iterable<Collection<T>>) {
         for (rng in ranges) {
             listData.addAll(rng)
@@ -41,7 +49,7 @@ open class Grid2D<T> {
             throw IndexOutOfBoundsException()
     }
 
-    private fun checkBounds(x: Int, y: Int): Boolean{
+    fun checkBounds(x: Int, y: Int): Boolean {
         if (x !in 0..<width)
             return false
         if (y !in 0..<height)
@@ -53,6 +61,7 @@ open class Grid2D<T> {
         assertBounds(x, y)
         return listData[y * width + x]
     }
+
     operator fun set(x: Int, y: Int, assign: T) {
         assertBounds(x, y)
         listData[y * width + x] = assign
