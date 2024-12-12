@@ -95,6 +95,5 @@ class Day09 : Day {
 fun main() {
     val d = Day09()
     println(d.part1())
-    // 6413328589346
     println(d.part2())
 }

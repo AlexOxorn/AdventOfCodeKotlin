@@ -26,7 +26,7 @@ class Day08 : Day {
     init {
         val input = ResourceIterable(getInputName(), Scanner::nextLine)
         grid = CharacterGrid(input)
-        antennaMap = grid.withIndex().filterNot{ it.second == '.' }.groupBy({it.second}, {it.first})
+        antennaMap = grid.withIndex().filterNot{ it.second == '.' }.groupBy({it.second}, {it.first.x to it.first.y})
     }
 
     private fun getLinearCombination(init: Coord, dir: Coord): List<Coord> {

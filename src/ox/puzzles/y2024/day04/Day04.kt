@@ -1,6 +1,7 @@
 package ox.puzzles.y2024.day04
 
 import ox.lib.util.CharacterGrid
+import ox.lib.util.GridIndex
 import ox.puzzles.Day
 import ox.puzzles.ResourceIterable
 import java.util.*
@@ -24,8 +25,8 @@ fun printBoard(cross: CharacterGrid, set: HashSet<Pair<Int, Int>>) {
     println()
 }
 
-fun checkSubWordPart(cross: CharacterGrid, start: Pair<Int, Int>, dir: Pair<Int, Int>, wordLength: Int = 4): Boolean {
-    val indices = (0..<wordLength).map { start.first + dir.first * it to start.second + dir.second * it }
+fun checkSubWordPart(cross: CharacterGrid, start: GridIndex, dir: Pair<Int, Int>, wordLength: Int = 4): Boolean {
+    val indices = (0..<wordLength).map { start.x + dir.first * it to start.y + dir.second * it }
     val chars = indices.map { (i, j) -> cross.getOrNull(i, j) }
     if (chars.any { it == null })
         return false
@@ -37,8 +38,8 @@ fun checkSubWordPart(cross: CharacterGrid, start: Pair<Int, Int>, dir: Pair<Int,
     return true
 }
 
-fun checkCrossWordPart(cross: CharacterGrid, start: Pair<Int, Int>, dir1: Pair<Int, Int>): Boolean {
-    val indices1 = (-1..1).map { start.first + dir1.first * it to start.second + dir1.second * it }
+fun checkCrossWordPart(cross: CharacterGrid, start: GridIndex, dir1: Pair<Int, Int>): Boolean {
+    val indices1 = (-1..1).map { start.x + dir1.first * it to start.y + dir1.second * it }
     val chars1 = indices1.map { (i, j) -> cross.getOrNull(i, j) }
     if (chars1.any { it == null })
         return false
@@ -50,7 +51,7 @@ fun checkCrossWordPart(cross: CharacterGrid, start: Pair<Int, Int>, dir1: Pair<I
     return true
 }
 
-fun checkSubWord(cross: CharacterGrid, start: Pair<Int, Int>): Int {
+fun checkSubWord(cross: CharacterGrid, start: GridIndex): Int {
     return listOf(
         1 to 0,
         1 to 1,
@@ -63,7 +64,7 @@ fun checkSubWord(cross: CharacterGrid, start: Pair<Int, Int>): Int {
     ).count { checkSubWordPart(cross, start, it) }
 }
 
-fun checkCrossWord(cross: CharacterGrid, start: Pair<Int, Int>): Int {
+fun checkCrossWord(cross: CharacterGrid, start: GridIndex): Int {
     return if (listOf(1 to 1, 1 to -1).all { checkCrossWordPart(cross, start, it) }) 1 else 0
 }
 
@@ -71,7 +72,7 @@ fun solve1(cross: CharacterGrid) = solve(cross, 'X', ::checkSubWord)
 
 fun solve2(cross: CharacterGrid) = solve(cross, 'A', ::checkCrossWord)
 
-fun solve(cross: CharacterGrid, checkChar: Char, checkFunc: (CharacterGrid, Pair<Int, Int>) -> Int): Int {
+fun solve(cross: CharacterGrid, checkChar: Char, checkFunc: (CharacterGrid, GridIndex) -> Int): Int {
     val indices = cross.indices()
     val startsWithX = indices.filter { (i, j) -> cross.getOrNull(i, j) == checkChar }
     return startsWithX

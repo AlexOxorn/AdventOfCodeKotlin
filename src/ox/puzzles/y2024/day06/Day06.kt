@@ -1,8 +1,11 @@
 package ox.puzzles.y2024.day06
 
 import ox.lib.util.Grid2D
+import ox.lib.util.GridIndex
 import ox.puzzles.Day
 import ox.puzzles.ResourceIterable
+import ox.puzzles.y2021.Grid
+
 import java.util.*
 
 fun findStart(grid: Grid2D<Int>) = grid.indices().find { (i, j) -> grid[i, j] == START }!!
@@ -41,13 +44,13 @@ fun turn90(dir: Int): Int {
     }
 }
 
-fun moveForward(dir: Int, pos: Pair<Int, Int>): Pair<Int, Int> {
+fun moveForward(dir: Int, pos: GridIndex): GridIndex {
     val (i, j) = pos
     return when (dir) {
-        UP -> i to j - 1
-        RIGHT -> i + 1 to j
-        DOWN -> i to j + 1
-        LEFT -> i - 1 to j
+        UP -> pos.up()
+        RIGHT -> pos.right()
+        DOWN -> pos.down()
+        LEFT -> pos.left()
         else -> {
             throw IllegalArgumentException("$i,$j -> $dir")
         }
@@ -78,7 +81,7 @@ fun printGrid(g: Grid2D<Int>, color: Int = 31) {
     println()
 }
 
-fun step(grid: Grid2D<Int>, pos: Pair<Int, Int>, dir: Int): Pair<Int, Pair<Int, Int>?> {
+fun step(grid: Grid2D<Int>, pos: GridIndex, dir: Int): Pair<Int, GridIndex?> {
     val (i, j) = pos
     val curr = grid[i, j]
     val (i2, j2) = moveForward(dir, pos)
@@ -89,12 +92,12 @@ fun step(grid: Grid2D<Int>, pos: Pair<Int, Int>, dir: Int): Pair<Int, Pair<Int, 
     return when (next) {
         null -> dir to null
         OBSTACLE -> turn90(dir) to pos
-        else -> dir to (i2 to j2)
+        else -> dir to GridIndex(i2, j2)
     }
 }
 
-fun move(grid: Grid2D<Int>, pos: Pair<Int, Int>, dir: Int, check: Boolean = false): Long {
-    var curPos: Pair<Int, Int>? = pos
+fun move(grid: Grid2D<Int>, pos: GridIndex, dir: Int, check: Boolean = false): Long {
+    var curPos: GridIndex? = pos
     var curDir = dir
     var loopCount = 0L
 
@@ -107,7 +110,7 @@ fun move(grid: Grid2D<Int>, pos: Pair<Int, Int>, dir: Int, check: Boolean = fals
             continue
 
         if (!check) {
-            if ((grid[newPos.first, newPos.second] and curDir) != 0) {
+            if ((grid[newPos.x, newPos.y] and curDir) != 0) {
                 return 1
             }
         } else if (checkLoop(grid, newPos, curDir)) {
@@ -118,7 +121,7 @@ fun move(grid: Grid2D<Int>, pos: Pair<Int, Int>, dir: Int, check: Boolean = fals
     return loopCount
 }
 
-fun checkLoop(grid: Grid2D<Int>, pos: Pair<Int, Int>, dir: Int): Boolean {
+fun checkLoop(grid: Grid2D<Int>, pos: GridIndex, dir: Int): Boolean {
     val (i2, j2) = moveForward(dir, pos)
     val next = grid.getOrNull(i2, j2)
     if (next == OBSTACLE || next == null || ((next and VISITED) != 0))
@@ -143,14 +146,14 @@ class Day06 : Day {
 
     override fun part1(): Long {
         val grid = getGrid()
-        val pos: Pair<Int, Int> = findStart(grid)
+        val pos: GridIndex = findStart(grid)
         move(grid, pos, UP)
         return grid.listData.count { (it and VISITED) != 0 }.toLong()
     }
 
     override fun part2(): Long {
         val grid = getGrid()
-        val pos: Pair<Int, Int> = findStart(grid)
+        val pos: GridIndex = findStart(grid)
         return move(grid, pos, UP, true)
     }
 }
