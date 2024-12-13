@@ -84,6 +84,10 @@ open class Grid2D<T> {
         listData[y * width + x] = assign
     }
 
+    operator fun set(i: GridIndex, assign: T) {
+        return set(i.x, i.y, assign)
+    }
+
     fun getOrNull(x: Int, y: Int): T? {
         if (!checkBounds(x, y)) {
             return null
