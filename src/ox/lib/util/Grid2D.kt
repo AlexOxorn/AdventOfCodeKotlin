@@ -2,11 +2,11 @@ package ox.lib.util
 
 import ox.lib.itertools.cartesianProduct
 
-data class GridIndex(val x: Int = 0, val y: Int = 0)  {
-    fun up() = GridIndex(x, y-1)
-    fun down() = GridIndex(x, y+1)
-    fun left() = GridIndex(x - 1, y)
-    fun right() = GridIndex(x + 1, y)
+data class GridIndex(val x: Int = 0, val y: Int = 0) {
+    fun up(distance: Int = 1) = GridIndex(x, y - distance)
+    fun down(distance: Int = 1) = GridIndex(x, y + distance)
+    fun left(distance: Int = 1) = GridIndex(x - distance, y)
+    fun right(distance: Int = 1) = GridIndex(x + distance, y)
 
     fun cardinal() = listOf(up(), right(), down(), left())
 }
@@ -96,11 +96,20 @@ open class Grid2D<T> {
     }
 
     fun indices() = (0..<height).cartesianProduct(0..<width).map { (j, i) -> GridIndex(i, j) }
+
+    fun indexOf(v: T) = indices().firstOrNull { this[it] == v }
 }
 
 class CharacterGrid(lines: Iterable<String>) : Grid2D<Char>(
     lines.asSequence().map { it.toList() }.asIterable()
-)
+) {
+    override fun toString() = buildString {
+        for (r in rows()) {
+            r.forEach { if (it == '.') append(' ') else append(it) }
+            append('\n')
+        }
+    }
+}
 
 class DigitGrid(lines: Iterable<String>) : Grid2D<Int>(
     lines.asSequence().map { it.asIterable().map { char -> char - '0' } }.asIterable()

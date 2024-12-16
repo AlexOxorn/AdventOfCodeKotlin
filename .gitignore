@@ -1,6 +1,11 @@
 ## Advent of Code ##
 inputs/*
 src/ox/puzzles/**/*.txt
+gradlew
+gradlew.bat
+gradle
+.gradle
+build
 
 ### IntelliJ IDEA ###
 out/
