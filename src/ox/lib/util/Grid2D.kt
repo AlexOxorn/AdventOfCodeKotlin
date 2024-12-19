@@ -2,13 +2,44 @@ package ox.lib.util
 
 import ox.lib.itertools.cartesianProduct
 
+enum class GridDir {
+    UP, DOWN, LEFT, RIGHT;
+    fun opposite() = when (this) {
+        UP -> DOWN
+        DOWN -> UP
+        LEFT -> RIGHT
+        RIGHT -> LEFT
+    }
+    fun right() = when (this) {
+        UP -> RIGHT
+        DOWN -> LEFT
+        LEFT -> UP
+        RIGHT -> DOWN
+    }
+    fun left() = opposite().right()
+}
+
 data class GridIndex(val x: Int = 0, val y: Int = 0) {
     fun up(distance: Int = 1) = GridIndex(x, y - distance)
     fun down(distance: Int = 1) = GridIndex(x, y + distance)
     fun left(distance: Int = 1) = GridIndex(x - distance, y)
     fun right(distance: Int = 1) = GridIndex(x + distance, y)
 
+    fun move(dir: GridDir, distance: Int = 1) = when(dir) {
+        GridDir.UP -> up(distance)
+        GridDir.DOWN -> down(distance)
+        GridDir.LEFT -> left(distance)
+        GridDir.RIGHT -> right(distance)
+    }
+
+    companion object {
+        val dirs = listOf(
+            GridDir.UP, GridDir.RIGHT, GridDir.DOWN, GridDir.LEFT
+        )
+    }
+
     fun cardinal() = listOf(up(), right(), down(), left())
+    fun cardinalWithDir() = cardinal() zip dirs
 }
 
 open class Grid2D<T> {
