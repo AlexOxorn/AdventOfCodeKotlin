@@ -50,7 +50,6 @@ open class ScanIterable<T>(scan: Scanner, val parseFunc: (Scanner) -> T) : Itera
     }
 }
 
-
 class FileIterable<T>(filename: String, parseFunc: (Scanner) -> T) :
     ScanIterable<T>(Scanner(File(filename)), parseFunc)
 

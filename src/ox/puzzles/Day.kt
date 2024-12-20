@@ -1,5 +1,7 @@
 package ox.puzzles
 
+import java.util.*
+
 interface Day {
     fun part1s(): String {
         return part1().toString()
@@ -47,4 +49,5 @@ interface Day {
     fun getSampleInputName(sampleNumber: Int? = null) = packageToPath { transformNameSample(it, sampleNumber) }
     fun getResource(filename: String) = Day::class.java.getResourceAsStream(filename)!!
     fun getBufferedReader(filename: String) = getResource(filename).bufferedReader()
+    fun getScanner(filename: String) = Scanner(getBufferedReader(filename))
 }
