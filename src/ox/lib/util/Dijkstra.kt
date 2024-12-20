@@ -57,7 +57,7 @@ open class DijkstraSolver<Node, Cost>(
             val tentativeScore = costAdd(gScore.getValue(current), cost)
             val alreadyChecked = gScore.contains(neighbour)
             val cmpResult = if (alreadyChecked) costCmp(tentativeScore, gScore.getValue(neighbour)) else -1
-            if (cmpResult > 0) {
+            if (cmpResult >= 0) {
                 continue
             }
             if (trackCameFrom) {
@@ -98,6 +98,8 @@ open class DijkstraSolver<Node, Cost>(
         reset()
         while (openSet.isNotEmpty()) {
             val (current, currentCost) = openSet.remove()
+            if (costCmp(currentCost, gScore[current]!!) < -1)
+                continue
             debug(current, currentCost, openSet, gScore, cameFrom)
             processNeighbours(current)
             if (sentinel(current)) {
@@ -107,7 +109,7 @@ open class DijkstraSolver<Node, Cost>(
     }
 
     operator fun invoke(): List<Pair<Node, Cost>> {
-        return getSequence().take(1).first()
+        return getSequence().take(1).firstOrNull() ?: emptyList()
     }
 
     override fun iterator(): Iterator<List<Pair<Node, Cost>>> {

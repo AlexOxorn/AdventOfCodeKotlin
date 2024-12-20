@@ -4,18 +4,21 @@ import ox.lib.itertools.cartesianProduct
 
 enum class GridDir {
     UP, DOWN, LEFT, RIGHT;
+
     fun opposite() = when (this) {
         UP -> DOWN
         DOWN -> UP
         LEFT -> RIGHT
         RIGHT -> LEFT
     }
+
     fun right() = when (this) {
         UP -> RIGHT
         DOWN -> LEFT
         LEFT -> UP
         RIGHT -> DOWN
     }
+
     fun left() = opposite().right()
 }
 
@@ -25,7 +28,7 @@ data class GridIndex(val x: Int = 0, val y: Int = 0) {
     fun left(distance: Int = 1) = GridIndex(x - distance, y)
     fun right(distance: Int = 1) = GridIndex(x + distance, y)
 
-    fun move(dir: GridDir, distance: Int = 1) = when(dir) {
+    fun move(dir: GridDir, distance: Int = 1) = when (dir) {
         GridDir.UP -> up(distance)
         GridDir.DOWN -> down(distance)
         GridDir.LEFT -> left(distance)
@@ -54,7 +57,7 @@ open class Grid2D<T> {
         return Grid2D(width, listData.map(proj))
     }
 
-    fun copy(): Grid2D<T> {
+    open fun copy(): Grid2D<T> {
         return Grid2D(width, listData)
     }
 
@@ -131,12 +134,17 @@ open class Grid2D<T> {
     fun indexOf(v: T) = indices().firstOrNull { this[it] == v }
 }
 
-class CharacterGrid(lines: Iterable<String>) : Grid2D<Char>(
-    lines.asSequence().map { it.toList() }.asIterable()
-) {
+class CharacterGrid : Grid2D<Char> {
+    constructor(lines: Iterable<String>) : super(lines.asSequence().map { it.toList() }.asIterable())
+    constructor(width: Int, height: Int = width, generator: (Int) -> Char) : super(width, height, generator)
+    constructor(width: Int, range: Iterable<Char>) : super(width, range)
+    override fun copy(): CharacterGrid {
+        return CharacterGrid(width, listData)
+    }
+
     override fun toString() = buildString {
         for (r in rows()) {
-            r.forEach { if (it == '.') append(' ') else append(it) }
+            r.forEach { if (it == '.') append('.') else append(it) }
             append('\n')
         }
     }
