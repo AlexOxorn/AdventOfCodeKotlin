@@ -73,12 +73,15 @@ open class DijkstraSolver<Node, Cost>(
         gScore = mutableMapOf()
     }
 
-    fun setDebugFunction(f: (Node, Cost, PriorityQueue<Pair<Node, Cost>>, Map<Node, Cost>, Map<Node, Node>) -> Unit) {
+    fun setDebugFunction(f: (Node, Cost, PriorityQueue<Pair<Node, Cost>>, Map<Node, Cost>, Map<Node, Node>) -> Unit):
+            DijkstraSolver<Node, Cost> {
         debugFunc = f
+        return this
     }
 
-    fun trackPath() {
+    fun trackPath(): DijkstraSolver<Node, Cost> {
         trackCameFrom = true
+        return this
     }
 
     private fun generateResult(current: Node): List<Pair<Node, Cost>> {
@@ -115,4 +118,69 @@ open class DijkstraSolver<Node, Cost>(
     override fun iterator(): Iterator<List<Pair<Node, Cost>>> {
         return getSequence().iterator()
     }
+}
+
+class SuperDijkstraSolver<Node, Cost>(
+    aStart: List<Node>,
+    aEnd: (Node) -> Boolean,
+    aGetNeighbours: (Node) -> Iterable<Pair<Node, Cost>>,
+    aNullCost: Cost,
+    aCostCmp: (Cost, Cost) -> Int,
+    aCostAdd: (Cost, Cost) -> Cost,
+    aGetHeuristic: ((Node) -> Cost)? = null,
+) : DijkstraSolver<Node, Cost>(aStart, aEnd, aGetNeighbours, aNullCost, aCostCmp, aCostAdd, aGetHeuristic) {
+    private val cameFrom2: MutableMap<Node, MutableList<Node>> = mutableMapOf()
+
+    private fun processNeighbours2(current: Node) {
+        for ((neighbour, cost) in getNeighbours(current)) {
+            val tentativeScore = costAdd(gScore.getValue(current), cost)
+            val alreadyChecked = gScore.contains(neighbour)
+            val cmpResult = if (alreadyChecked) costCmp(tentativeScore, gScore.getValue(neighbour)) else -1
+            if (cmpResult > 0) {
+                continue
+            } else if (cmpResult == 0) {
+                cameFrom2[neighbour]?.add(current)
+            } else {
+                cameFrom2[neighbour] = mutableListOf(current)
+            }
+
+            gScore[neighbour] = tentativeScore
+            openSet.add(neighbour to costAdd(tentativeScore, getHeuristic(neighbour)))
+        }
+    }
+
+    private fun allBestResults(from: Node, seen: MutableSet<Node> = mutableSetOf()): Set<Node> {
+        if (seen.contains(from))
+            return seen
+        seen.add(from)
+        cameFrom2[from]?.forEach { allBestResults(it, seen) }
+        return seen
+    }
+
+    fun getBestPathsResult(from: Node): Set<List<Node>> {
+        return cameFrom2[from]
+            ?.flatMap {
+                getBestPathsResult(it)
+                    .map {
+                        sub -> sub + listOf(from)
+                    }
+            }
+            ?.toSet() ?: setOf(emptyList())
+    }
+
+    fun <R> solve2(res: (Node) -> R): R {
+        reset()
+        while (openSet.isNotEmpty()) {
+            val (current, currentCost) = openSet.remove()
+            debug(current, currentCost, openSet, gScore, cameFrom)
+            processNeighbours2(current)
+            if (sentinel(current)) {
+                return res(current)
+            }
+        }
+        throw Exception()
+    }
+
+    fun getBestPositions() = solve2(::allBestResults)
+    fun getBestPaths() = solve2(::getBestPathsResult)
 }

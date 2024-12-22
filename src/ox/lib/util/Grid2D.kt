@@ -1,6 +1,7 @@
 package ox.lib.util
 
 import ox.lib.itertools.cartesianProduct
+import kotlin.math.abs
 
 enum class GridDir {
     UP, DOWN, LEFT, RIGHT;
@@ -28,12 +29,22 @@ data class GridIndex(val x: Int = 0, val y: Int = 0) {
     fun left(distance: Int = 1) = GridIndex(x - distance, y)
     fun right(distance: Int = 1) = GridIndex(x + distance, y)
 
+    fun move(dir: Char, distance: Int = 1) = when (dir) {
+        '^' -> up(distance)
+        'v' -> down(distance)
+        '<' -> left(distance)
+        '>' -> right(distance)
+        else -> throw IllegalArgumentException()
+    }
+
     fun move(dir: GridDir, distance: Int = 1) = when (dir) {
         GridDir.UP -> up(distance)
         GridDir.DOWN -> down(distance)
         GridDir.LEFT -> left(distance)
         GridDir.RIGHT -> right(distance)
     }
+
+    infix fun manhattan(other: GridIndex) = abs(x - other.x) + abs(y - other.y)
 
     companion object {
         val dirs = listOf(
@@ -129,6 +140,21 @@ open class Grid2D<T> {
         return listData.getOrNull(y * width + x)
     }
 
+    fun getOrNull(i: GridIndex): T? {
+        return getOrNull(i.x, i.y)
+    }
+
+    fun getOrElse(x: Int, y: Int, default: T): T {
+        if (!checkBounds(x, y)) {
+            return default
+        }
+        return listData.getOrElse(y * width + x) { default }
+    }
+
+    fun getOrElse(i: GridIndex, default: T): T {
+        return getOrElse(i.x, i.y, default)
+    }
+
     fun indices() = (0..<height).cartesianProduct(0..<width).map { (j, i) -> GridIndex(i, j) }
 
     fun indexOf(v: T) = indices().firstOrNull { this[it] == v }
@@ -145,6 +171,17 @@ class CharacterGrid : Grid2D<Char> {
     override fun toString() = buildString {
         for (r in rows()) {
             r.forEach { if (it == '.') append('.') else append(it) }
+            append('\n')
+        }
+    }
+
+    fun highlight(colorMap: Map<GridIndex, Int>) = buildString {
+        val defMap = colorMap.withDefault { 0 }
+        val high = { x: Int, y: Int, c: Char -> "${27.toChar()}[${defMap.getValue(GridIndex(x, y))}m${c}${27.toChar()}[0m" }
+        for ( (y, r) in rows().withIndex()) {
+            r.forEachIndexed { x, it ->
+                append(high(x, y, it))
+            }
             append('\n')
         }
     }
